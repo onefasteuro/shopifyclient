@@ -1,4 +1,4 @@
-# Shopify
+# ShopifyClient
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Total Downloads][ico-downloads]][link-downloads]
@@ -49,9 +49,7 @@ license. Please see the [license file](license.md) for more information.
 [ico-travis]: https://img.shields.io/travis/onefasteuro/shopify/master.svg?style=flat-square
 [ico-styleci]: https://styleci.io/repos/12345678/shield
 
-[link-packagist]: https://packagist.org/packages/onefasteuro/shopify
-[link-downloads]: https://packagist.org/packages/onefasteuro/shopify
-[link-travis]: https://travis-ci.org/onefasteuro/shopify
-[link-styleci]: https://styleci.io/repos/12345678
+[link-packagist]: https://packagist.org/packages/onefasteuro/shopifyclient
+[link-downloads]: https://packagist.org/packages/onefasteuro/shopifyclient
 [link-author]: https://github.com/onefasteuro
 [link-contributors]: ../../contributors]
