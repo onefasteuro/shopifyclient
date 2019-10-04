@@ -2,8 +2,6 @@
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Total Downloads][ico-downloads]][link-downloads]
-[![Build Status][ico-travis]][link-travis]
-[![StyleCI][ico-styleci]][link-styleci]
 
 This package allows you to query the shopify GraphQL API.
 
@@ -27,10 +25,6 @@ Please see the [changelog](changelog.md) for more information on what has change
 $ composer test
 ```
 
-## Contributing
-
-Please see [contributing.md](contributing.md) for details and a todolist.
-
 ## Security
 
 If you discover any security related issues, please email author email instead of using the issue tracker.
@@ -46,10 +40,7 @@ license. Please see the [license file](license.md) for more information.
 
 [ico-version]: https://img.shields.io/packagist/v/onefasteuro/shopify.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/onefasteuro/shopify.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/onefasteuro/shopify/master.svg?style=flat-square
-[ico-styleci]: https://styleci.io/repos/12345678/shield
 
 [link-packagist]: https://packagist.org/packages/onefasteuro/shopifyclient
 [link-downloads]: https://packagist.org/packages/onefasteuro/shopifyclient
 [link-author]: https://github.com/onefasteuro
-[link-contributors]: ../../contributors]
