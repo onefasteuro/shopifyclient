@@ -10,7 +10,7 @@ This package allows you to query the shopify GraphQL API.
 Via Composer
 
 ``` bash
-$ composer require onefasteuro/shopify
+$ composer require onefasteuro/shopifyclient
 ```
 
 ## Usage
