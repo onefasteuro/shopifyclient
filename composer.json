@@ -1,0 +1,42 @@
+{
+    "name": "onefasteuro/shopifyclient",
+    "description": "Graphql Shopify Client",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Oliver Haroun",
+            "email": "onefasteuro@gmail.com",
+            "homepage": "https://driftfreediving.com"
+        }
+    ],
+    "homepage": "https://github.com/onefasteuro/shopifyclient",
+    "keywords": ["Laravel", "Shopify"],
+    "require": {
+        "ext-json": "*",
+        "illuminate/support": "^6.0",
+        "rmccue/requests": "^1.7"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0",
+        "mockery/mockery": "^1.1",
+        "orchestra/testbench": "^4.0",
+        "sempro/phpunit-pretty-print": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "onefasteuro\\ShopifyClient\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "onefasteuro\\ShopifyClient\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "onefasteuro\\ShopifyClient\\ShopifyClientServiceProvider"
+            ]
+        }
+    }
+}
