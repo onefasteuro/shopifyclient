@@ -2,7 +2,7 @@
 
 namespace onefasteuro\ShopifyClient\Throttles;
 
-
+use onefasteuro\ShopifyClient\GraphResponse;
 
 class Throttle implements ThrottleInterface
 {
@@ -15,8 +15,10 @@ class Throttle implements ThrottleInterface
 	protected $restore_time = 0;
 	
 
-	public function assertThrottle(array $output)
+	public function assertThrottle(GraphResponse $response)
 	{
+		$output = $response->parsed();
+		
 		$is = false;
 		if(array_key_exists('errors', $output)) {
 			foreach($output['errors'] as $error) {
