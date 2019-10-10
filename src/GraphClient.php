@@ -108,9 +108,15 @@ class GraphClient
 			do {
 				$response = $this->client->post('graphql.json', [], $send);
 				$output = new GraphResponse($response);
-				$throttled = $this->getThrottle()->assertThrottle($output);
 				
-				$this->getThrottle()->mightThrottle();;
+				if($output->isNotFound()) {
+					throw new NotFoundException('The url could not be found', 40);
+				}
+				
+				if($response->isOk()) {
+					$throttled = $this->getThrottle()->assertThrottle($output);
+					$this->getThrottle()->mightThrottle();
+				}
 			}
 			while ($throttled === true);
 		}
