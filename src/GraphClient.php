@@ -12,6 +12,8 @@ class GraphClient
 	protected $shop;
 	protected $token;
 
+	protected $raw_response;
+	protected $parsed_response;
 
 	public function __construct($version, Throttles\ThrottleInterface $throttle)
 	{
@@ -103,7 +105,7 @@ class GraphClient
 		
 		do {
 			$response = $this->client->post('graphql.json', [], $send);
-			$output = json_decode($response->body, true);
+			$output = new GraphResponse($response);
 			$throttled = $this->getThrottle()->assertThrottle($output);
 			
 			$this->getThrottle()->mightThrottle();;
