@@ -81,6 +81,11 @@ class GraphResponse implements GraphResponseInterface
 		return ($key === null) ? $this->parsed_response : $this->parsed_response[$key];
 	}
 	
+	public function data()
+	{
+		return $this->parsed('data');
+	}
+	
 	public static function parse($raw)
 	{
 		return json_decode($raw->body, true);

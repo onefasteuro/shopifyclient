@@ -12,6 +12,8 @@ interface GraphResponseInterface
 	
 	public function hasErrors();
 	
-	public function parsed();
+	public function parsed($key = null);
+	
+	public function data();
 	
 }
