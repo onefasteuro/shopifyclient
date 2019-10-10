@@ -2,6 +2,7 @@
 
 namespace onefasteuro\ShopifyClient;
 
+use onefasteuro\ShopifyClient\Exceptions\ErrorsFoundException;
 use onefasteuro\ShopifyClient\Exceptions\NotFoundException;
 
 class GraphClient
@@ -104,26 +105,16 @@ class GraphClient
 		$output = null;
 		$throttled = true;
 		
-		try {
-			do {
-				$response = $this->client->post('graphql.json', [], $send);
-				$output = new GraphResponse($response);
-				
-				if($output->isNotFound()) {
-					throw new NotFoundException('The url could not be found', 40);
-				}
-				
-				if($response->isOk()) {
-					$throttled = $this->getThrottle()->assertThrottle($output);
-					$this->getThrottle()->mightThrottle();
-				}
-			}
-			while ($throttled === true);
+		do {
+			$response = $this->client->post('graphql.json', [], $send);
+			$output = new GraphResponse($response);
+			
+			$output->assertSuccessResponse();
+			
+			$throttled = $this->getThrottle()->assertThrottle($output);
+			$this->getThrottle()->mightThrottle();
 		}
-		catch(NotFoundException $e)
-		{
-			$output = new EmptyGraphResponse;
-		}
+		while ($throttled === true);
 		
 		//return the response
 		return $output;

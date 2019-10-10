@@ -10,6 +10,8 @@ interface GraphResponseInterface
 	
 	public function raw();
 	
+	public function hasErrors();
+	
 	public function parsed();
 	
 }
