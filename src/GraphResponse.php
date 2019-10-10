@@ -2,11 +2,13 @@
 
 namespace onefasteuro\ShopifyClient;
 
-class GraphResponse
+use Requests_Response;
+
+class GraphResponse implements GraphResponseInterface
 {
 	protected $raw;
 	
-	public function __construct($response)
+	public function __construct(Requests_Response $response)
 	{
 		$this->raw = $response;
 	}
@@ -29,6 +31,16 @@ class GraphResponse
 	public function parsed()
 	{
 		return json_decode($this->raw->body, true);
+	}
+	
+	public function isNotFound()
+	{
+		return $this->raw->status_code === 404 ? true : false;
+	}
+	
+	public function isOk()
+	{
+		return $this->raw->status_code === 200 ? true : false;
 	}
 	
 }

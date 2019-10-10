@@ -2,6 +2,7 @@
 
 namespace onefasteuro\ShopifyClient\Throttles;
 
+use onefasteuro\ShopifyClient\Exceptions\NotFoundException;
 use onefasteuro\ShopifyClient\GraphResponse;
 
 class Throttle implements ThrottleInterface
@@ -17,6 +18,10 @@ class Throttle implements ThrottleInterface
 
 	public function assertThrottle(GraphResponse $response)
 	{
+		if($response->isNotFound()) {
+			throw new NotFoundException('The url can not be found on this server.', 404);
+		}
+		
 		$output = $response->parsed();
 		
 		$is = false;
