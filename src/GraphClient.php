@@ -24,9 +24,13 @@ class GraphClient
 		$this->version= $version;
 	}
 	
-	protected function assertUrl()
+	protected function assertUrl($domain)
 	{
-		return 'https://' . $this->shop . '/admin/api/' . $this->version . '/';
+		if(!preg_match('/https\:\/\//', $domain)) {
+			$domain = sprintf('https://%s', $domain);
+		}
+		
+		return $domain . '/admin/api/' . $this->version . '/';
 	}
 	
 	public function init($shop, $token)
@@ -36,7 +40,7 @@ class GraphClient
 		
 		$headers = ['Content-Type' => 'application/json', 'X-Shopify-Access-Token' => $this->token, 'X-GraphQL-Cost-Include-Fields' => true];
 		
-		$url = $this->assertUrl();
+		$url = $this->assertUrl($shop);
 		
 		$this->client = new \Requests_Session($url, $headers);
 		
