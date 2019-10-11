@@ -86,15 +86,10 @@ class GraphResponse implements GraphResponseInterface
 			throw new NotJsonException('This request does not have a valid response', $this->status_code);
 		}
 		
-		if($this->isJson() and $this->hasErrors()) {
-			$errors = $this->assertErrors();
-			throw new ErrorsFoundException('Your request contained some errors: ' . $errors, 400);
-		}
-			
 		return $this;
 	}
 		
-	public function assertErrors()
+	public function errors()
 	{
 		$output = [];
 		
@@ -102,7 +97,7 @@ class GraphResponse implements GraphResponseInterface
 			
 		if(is_array($errors)) {
 			if(count($errors) === 1) {
-				$output[] =$errors[0]['message'];
+				$output[] = $errors[0]['message'];
 			}
 				
 			if (count($errors) > 1) {
@@ -112,7 +107,7 @@ class GraphResponse implements GraphResponseInterface
 			}
 		}
 			
-		return implode("\n", $output);
+		return $output;
 	}
 		
 	public function hasErrors()

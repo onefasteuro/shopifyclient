@@ -2,10 +2,6 @@
 	
 namespace onefasteuro\ShopifyClient\Tests;
 
-	
-
-use onefasteuro\ShopifyClient\Exceptions\NotFoundException;
-use onefasteuro\ShopifyClient\Exceptions\NotJsonException;
 use onefasteuro\ShopifyClient\GraphClient;
 use onefasteuro\ShopifyClient\GraphResponse;
 
@@ -21,7 +17,7 @@ class HttpTest extends TestCase
 	
 	public function test404()
 	{
-		$this->expectException(NotFoundException::class);
+		$this->expectException(\onefasteuro\ShopifyClient\Exceptions\NotFoundException::class);
 		
 		$client = app(GraphClient::class);
 		$client->init('http://example.com', 'testtoken');
@@ -39,7 +35,9 @@ class HttpTest extends TestCase
 		
 		$response = new GraphResponse($headers, $code, $body);
 		
+		$this->assertIsObject($response->assertSuccessResponse());
 		$this->assertEquals(200, $response->statusCode());
+		$this->assertEquals(false, $response->hasErrors());
 		$this->assertEquals('gid://shopify/Shop/5521145907', $response->data('shop.id'));
 	}
 	
@@ -53,6 +51,26 @@ class HttpTest extends TestCase
 		$response = new GraphResponse($headers, $code, $body);
 		
 		$this->assertEquals(true, $response->hasErrors());
+		$this->assertIsArray($response->body());
+		
+		$errors = [
+			"Field 'ids' doesn't exist on type 'Shop'"
+		];
+		
+		$this->assertEquals($errors, $response->errors());
+	}
+	
+	public function testNotJson()
+	{
+		$data = file_get_contents(__DIR__.'/stubs/notjson-raw.text');
+		$body = GraphResponse::parseBody($data);
+		$code = GraphResponse::parseStatusCode($data);
+		$headers = GraphResponse::parseHeaders($data);
+		
+		$response = new GraphResponse($headers, $code, $body);
+		
+		$this->expectException(\onefasteuro\ShopifyClient\Exceptions\NotJsonException::class);
+		$response->assertSuccessResponse();
 	}
 }
 
