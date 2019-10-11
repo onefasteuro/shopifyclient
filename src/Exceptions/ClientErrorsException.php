@@ -2,7 +2,7 @@
 
 namespace onefasteuro\ShopifyClient\Exceptions;
 
-class NotFoundException extends ClientErrorsException
+class ClientErrorsException extends \Exception
 {
 
 	

@@ -2,7 +2,7 @@
 
 namespace onefasteuro\ShopifyClient\Exceptions;
 
-class NotAuthorizedException extends \Exception
+class NotAuthorizedException extends ClientErrorsException
 {
 
 	

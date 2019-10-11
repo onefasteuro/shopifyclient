@@ -2,7 +2,7 @@
 
 namespace onefasteuro\ShopifyClient\Exceptions;
 
-class ErrorsFoundException extends \Exception
+class ErrorsFoundException extends ClientErrorsException
 {
 
 	
