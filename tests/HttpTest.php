@@ -5,17 +5,27 @@ namespace onefasteuro\ShopifyClient\Tests;
 	
 use onefasteuro\ShopifyClient\Exceptions\ErrorsFoundException;
 use onefasteuro\ShopifyClient\Exceptions\NotFoundException;
+use onefasteuro\ShopifyClient\GraphResponse;
 
 class HttpTest extends TestCase
 {
 		
 		
-	public function testErrors()
+	public function testOk()
 	{
-		$this->expectException(ErrorsFoundException::class);
-		
-		$client = app(\onefasteuro\ShopifyClient\GraphClient::class);
-		
+		$mock = $this->mock(\onefasteuro\ShopifyClient\GraphClient::class);
+
+		$success = file_get_contents(__DIR__.'/../tests/stubs/success.json');
+
+		$req = new \Requests_Response;
+		$req->status_code = 200;
+		$req->body = $success;
+
+		$mock->shouldReceive('query')->andReturn(new GraphResponse($req));
+
+
+
+		/*
 		$client->init(getenv('SHOPIFY_APP_TOKEN'), getenv('SHOPIFY_APP_DOMAIN'));
 		
 		$call = 'query {
@@ -26,46 +36,21 @@ class HttpTest extends TestCase
 		}';
 		
 		$response = $client->query($call, []);
+		*/
 	}
-	
-	public function testNotFound()
-	{
-		$this->expectException(NotFoundException::class);
-		
-		$client = app(\onefasteuro\ShopifyClient\GraphClient::class);
-		
-		$client->init('testdomain.myshopify.com', '124e32e');
-		
-		$call = 'query {
-				shop {
-					id
-					name
-				}
-		}';
-		
-		$response = $client->query($call, []);
-	}
-	
-	public function testResponse()
-	{
-		
-		$client = app(\onefasteuro\ShopifyClient\GraphClient::class);
-		
-		$client->init(getenv('SHOPIFY_APP_TOKEN'), getenv('SHOPIFY_APP_DOMAIN'));
-		
-		$call = 'query {
-				shop {
-					id
-					name
-				}
-		}';
-		
-		$response = $client->query($call, []);
-		
-		$content = $response->parsed('data');
-		
-		$this->assertIsArray($content);
-	}
+
+	public function testErrors()
+    {
+        $mock = $this->mock(\onefasteuro\ShopifyClient\GraphClient::class);
+
+        $success = file_get_contents(__DIR__.'/../tests/stubs/errors.json');
+
+        $req = new \Requests_Response;
+        $req->status_code = 200;
+        $req->body = $success;
+
+        $mock->shouldReceive('query')->andThrow(ErrorsFoundException::class);
+    }
 	
 }
 
