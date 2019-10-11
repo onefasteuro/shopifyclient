@@ -1,0 +1,10 @@
+HTTP/2 200 
+date: Fri, 11 Oct 2019 16:33:05 GMT
+content-type: application/json; charset=utf-8
+set-cookie: __cfduid=dc2b3762a792e3c56b92a0bb328b573ce1570811585; expires=Sat, 10-Oct-20 16:33:05 GMT; path=/; domain=.myshopify.com; HttpOnly
+vary: Accept-Encoding
+referrer-policy: origin-when-cross-origin
+x-frame-options: DENY
+x-shopify-api-version: 2019-10
+
+{"errors":[{"message":"Field 'ids' doesn't exist on type 'Shop'","locations":[{"line":3,"column":6}],"path":["query","shop","ids"],"extensions":{"code":"undefinedField","typeName":"Shop","fieldName":"ids"}}]}

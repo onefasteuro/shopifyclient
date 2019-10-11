@@ -3,40 +3,55 @@
 namespace onefasteuro\ShopifyClient\Tests;
 
 	
-use onefasteuro\ShopifyClient\Exceptions\ErrorsFoundException;
-use onefasteuro\ShopifyClient\Exceptions\NotFoundException;
+
+use onefasteuro\ShopifyClient\GraphClient;
 use onefasteuro\ShopifyClient\GraphResponse;
 
 class HttpTest extends TestCase
 {
-		
-		
-	public function testOk()
+	public function testQuery()
 	{
-		$mock = $this->mock(\onefasteuro\ShopifyClient\GraphClient::class);
-
-		$success = file_get_contents(__DIR__.'/../tests/stubs/success.json');
-
-		$req = new \Requests_Response;
-		$req->status_code = 200;
-		$req->body = $success;
-
-		$mock->shouldReceive('query')->andReturn(new GraphResponse($req));
-
-
-
-		/*
-		$client->init(getenv('SHOPIFY_APP_TOKEN'), getenv('SHOPIFY_APP_DOMAIN'));
+		$client = app(GraphClient::class);
+		$client->init(getenv('SHOPIFY_APP_DOMAIN'), getenv('SHOPIFY_APP_TOKEN'));
 		
-		$call = 'query {
-				shop {
-					idd
-					nams
+		$call = '{
+		shop {
+					id
+					name
 				}
 		}';
 		
-		$response = $client->query($call, []);
-		*/
+		$client->query($call);
+		
+		
+	}
+	
+	/*
+public function testOk()
+{
+
+$mock = $this->mock(\onefasteuro\ShopifyClient\GraphClient::class);
+
+$success = file_get_contents(__DIR__.'/../tests/stubs/success.json');
+
+$req = new \Requests_Response;
+$req->status_code = 200;
+$req->body = $success;
+
+$mock->shouldReceive('query')->andReturn(new GraphResponse($req));
+
+
+
+$client->init(getenv('SHOPIFY_APP_TOKEN'), getenv('SHOPIFY_APP_DOMAIN'));
+
+$call = 'query {
+	shop {
+		idd
+		nams
+	}
+}';
+
+$response = $client->query($call, []);
 	}
 
 	public function testErrorsFound()
@@ -64,6 +79,6 @@ class HttpTest extends TestCase
         $mock = $this->mock(GraphResponse::class);
     }
 
-
+*/
 }
 

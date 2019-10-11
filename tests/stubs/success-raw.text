@@ -1,0 +1,6 @@
+HTTP/2 200 
+date: Fri, 11 Oct 2019 16:32:32 GMT
+content-type: application/json; charset=utf-8
+set-cookie: __cfduid=d34c85947a46706d6572b3c3926a5ca861570811552; expires=Sat, 10-Oct-20 16:32:32 GMT; path=/; domain=.myshopify.com; HttpOnly
+
+{"data":{"shop":{"id":"gid:\/\/shopify\/Shop\/5521145907"}},"extensions":{"cost":{"requestedQueryCost":1,"actualQueryCost":1,"throttleStatus":{"maximumAvailable":2000.0,"currentlyAvailable":1999,"restoreRate":100.0}}}}
