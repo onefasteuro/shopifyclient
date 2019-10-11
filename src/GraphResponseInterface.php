@@ -8,11 +8,9 @@ interface GraphResponseInterface
 	
 	public function isNotFound();
 	
-	public function raw();
-	
 	public function hasErrors();
 	
-	public function parsed($key = null);
+	public function body($key = null);
 	
 	public function data();
 	

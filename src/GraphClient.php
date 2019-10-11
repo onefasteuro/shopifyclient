@@ -14,10 +14,7 @@ class GraphClient
 	protected $throttle;
 		
 	protected $shop_domain;
-	protected $endpoint_url;
-	protected $headers;
 	protected $token;
-		
 		
 	public function __construct($version, Throttles\ThrottleInterface $throttle)
 	{
@@ -27,7 +24,7 @@ class GraphClient
 		
 	protected function assertUrl($domain)
 	{
-		if(!preg_match('/https\:\/\//', $domain)) {
+		if(!preg_match('/https\:\/\/|http\:\/\//', $domain)) {
 			$domain = sprintf('https://%s', $domain);
 		}
 		
@@ -39,13 +36,12 @@ class GraphClient
 		$this->shop_domain = $shop;
 		$this->token = $token;
 			
-		$this->headers = array('Content-Type: application/json',
+		$headers = array('Content-Type: application/json',
 				'X-Shopify-Access-Token: '.$this->token,
 				'X-GraphQL-Cost-Include-Fields: '. true);
-			
-		$this->endpoint_url = $this->assertUrl($shop);
+		$url = $this->assertUrl($shop);
 		
-		$this->client = static::clientFactory($this->endpoint_url, $this->headers);
+		$this->client = static::clientFactory($url, $headers);
 		
 		return $this;
 	}
@@ -83,28 +79,23 @@ class GraphClient
 		
 	public function query($gql, $variables = [])
 	{
-		if(count($variables) > 0) {
-			$send = ["query" => $gql, "variables" => $variables];
-		}
-		else {
-			$send = ["query" => $gql];
-		}
-			
-		$send = json_encode($send);
+		$send = (count($variables) > 0) ? ["query" => $gql, "variables" => $variables] : ["query" => $gql];
+		$send_payload = json_encode($send);
 			
 		$output = null;
-		$throttled = true;
 			
 		//client not init, stop and let everyone know
 		if(!is_resource($this->client)) {
 			throw new NotReadyException;
 		}
-			
-		curl_setopt($this->client, CURLOPT_POSTFIELDS, $send);
-			
+		
 		do {
-			$output = static::assertClientResponse($this->client);
-				
+			$response = $this->transport($send_payload);
+
+			$output = static::parse($response);
+			
+
+			
 			$output->assertSuccessResponse();
 				
 			$throttled = $this->getThrottle()->assertThrottle($output);
@@ -115,16 +106,22 @@ class GraphClient
 
 		return $output;
 	}
+	
 		
-		
-		
-	protected static function assertClientResponse($client)
+	protected function transport($payload)
 	{
-		$response = curl_exec($client);
-		$header_length = curl_getinfo($client, CURLINFO_HEADER_SIZE);
-		$headers = substr($response, 0, $header_length);
-		$body = substr($response, $header_length);
-		$status_code = curl_getinfo($client, CURLINFO_HTTP_CODE);
+		$headers = [];
+		
+		curl_setopt($this->client, CURLOPT_POSTFIELDS, $payload);
+		
+		return curl_exec($this->client);
+	}
+	
+	public static function parse($response)
+	{
+		$headers = GraphResponse::parseHeaders($response);
+		$status_code = GraphResponse::parseStatusCode($response);
+		$body = GraphResponse::parseBody($response);
 		
 		return new GraphResponse($headers, $status_code, $body);
 	}
@@ -143,7 +140,11 @@ class GraphClient
 			
 		return $ch;
 	}
-		
+	
+	public function getInfo($key)
+	{
+		return curl_getinfo($this->client, $key);
+	}
 		
 	public function __destruct()
 	{

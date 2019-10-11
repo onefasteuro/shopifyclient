@@ -4,81 +4,55 @@ namespace onefasteuro\ShopifyClient\Tests;
 
 	
 
+use onefasteuro\ShopifyClient\Exceptions\NotFoundException;
+use onefasteuro\ShopifyClient\Exceptions\NotJsonException;
 use onefasteuro\ShopifyClient\GraphClient;
 use onefasteuro\ShopifyClient\GraphResponse;
 
 class HttpTest extends TestCase
 {
-	public function testQuery()
+
+	public function testFlow()
 	{
-		$client = app(GraphClient::class);
-		$client->init(getenv('SHOPIFY_APP_DOMAIN'), getenv('SHOPIFY_APP_TOKEN'));
+		$mock = $this->mock(\onefasteuro\ShopifyClient\GraphClient::class);
 		
-		$call = '{
-		shop {
-					id
-					name
-				}
-		}';
-		
-		$client->query($call);
-		
-		
+		$mock->shouldReceive(['init', 'query', 'transport', 'parse'])->andReturn(GraphResponse::class);
 	}
 	
-	/*
-public function testOk()
-{
-
-$mock = $this->mock(\onefasteuro\ShopifyClient\GraphClient::class);
-
-$success = file_get_contents(__DIR__.'/../tests/stubs/success.json');
-
-$req = new \Requests_Response;
-$req->status_code = 200;
-$req->body = $success;
-
-$mock->shouldReceive('query')->andReturn(new GraphResponse($req));
-
-
-
-$client->init(getenv('SHOPIFY_APP_TOKEN'), getenv('SHOPIFY_APP_DOMAIN'));
-
-$call = 'query {
-	shop {
-		idd
-		nams
+	public function test404()
+	{
+		$this->expectException(NotFoundException::class);
+		
+		$client = app(GraphClient::class);
+		$client->init('http://example.com', 'testtoken');
+		
+		$response = $client->query([]);
 	}
-}';
+	
 
-$response = $client->query($call, []);
+	public function testResponse()
+	{
+		$data = file_get_contents(__DIR__.'/stubs/success-raw.text');
+		$body = GraphResponse::parseBody($data);
+		$code = GraphResponse::parseStatusCode($data);
+		$headers = GraphResponse::parseHeaders($data);
+		
+		$response = new GraphResponse($headers, $code, $body);
+		
+		$this->assertEquals(200, $response->statusCode());
+		$this->assertEquals('gid://shopify/Shop/5521145907', $response->data('shop.id'));
 	}
-
-	public function testErrorsFound()
-    {
-        $mock = $this->mock(\onefasteuro\ShopifyClient\GraphClient::class);
-
-        $success = file_get_contents(__DIR__.'/../tests/stubs/errors.json');
-
-        $req = new \Requests_Response;
-        $req->status_code = 200;
-        $req->body = $success;
-
-        $mock->shouldReceive('query')->andThrow(ErrorsFoundException::class);
-    }
-
-
-    public function testResponse()
-    {
-        $success = file_get_contents(__DIR__.'/../tests/stubs/success.json');
-
-        $req = new \Requests_Response;
-        $req->status_code = 200;
-        $req->body = $success;
-
-        $mock = $this->mock(GraphResponse::class);
-    }
-
-*/
+	
+	public function testErrorsResponse()
+	{
+		$data = file_get_contents(__DIR__.'/stubs/errors-raw.text');
+		$body = GraphResponse::parseBody($data);
+		$code = GraphResponse::parseStatusCode($data);
+		$headers = GraphResponse::parseHeaders($data);
+		
+		$response = new GraphResponse($headers, $code, $body);
+		
+		$this->assertEquals(true, $response->hasErrors());
+	}
 }
 

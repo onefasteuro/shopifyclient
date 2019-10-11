@@ -18,7 +18,7 @@ class Throttle implements ThrottleInterface
 
 	public function assertThrottle(GraphResponse $response)
 	{
-		$output = $response->parsed();
+		$output = $response->body();
 		
 		$is = false;
 		if(array_key_exists('errors', $output)) {
