@@ -10,14 +10,36 @@
 	class GraphResponse implements GraphResponseInterface
 	{
 		protected $raw;
-		protected $parsed_response;
+        protected $status_code = 200;
+		protected $body;
+		protected $parsed_body;
 		
 		public function __construct(Requests_Response $response)
 		{
-			$this->raw = $response;
-			$this->parsed_response = $this->parse($this->raw);
+			$this->setStatusCode($response->status_code);
+			$this->setBody($response->body);
+			$this->setParsedBody($this->parse($response));
+
+            $this->raw = $response;
 		}
-		
+
+		public function setStatusCode($s)
+        {
+            $this->status_code = $s;
+            return $this;
+        }
+
+		public function setBody($b)
+        {
+            $this->body = $b;
+            return $this;
+        }
+
+        public function setParsedBody($b)
+        {
+            $this->parsed_body = $b;
+            return $this;
+        }
 		
 		public function assertSuccessResponse()
 		{
@@ -81,7 +103,7 @@
 		
 		public function parsed($key = null)
 		{
-			return ($key === null) ? $this->parsed_response : $this->parsed_response[$key];
+			return ($key === null) ? $this->parsed_body : $this->parsed_body[$key];
 		}
 		
 		public function data()

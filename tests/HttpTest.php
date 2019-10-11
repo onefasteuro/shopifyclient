@@ -39,7 +39,7 @@ class HttpTest extends TestCase
 		*/
 	}
 
-	public function testErrors()
+	public function testErrorsFound()
     {
         $mock = $this->mock(\onefasteuro\ShopifyClient\GraphClient::class);
 
@@ -51,6 +51,19 @@ class HttpTest extends TestCase
 
         $mock->shouldReceive('query')->andThrow(ErrorsFoundException::class);
     }
-	
+
+
+    public function testResponse()
+    {
+        $success = file_get_contents(__DIR__.'/../tests/stubs/success.json');
+
+        $req = new \Requests_Response;
+        $req->status_code = 200;
+        $req->body = $success;
+
+        $mock = $this->mock(GraphResponse::class);
+    }
+
+
 }
 
