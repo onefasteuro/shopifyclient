@@ -7,8 +7,10 @@ use onefasteuro\ShopifyClient\Exceptions\NotAuthorizedException;
 use onefasteuro\ShopifyClient\Exceptions\NotFoundException;
 use Illuminate\Support\Arr;
 use onefasteuro\ShopifyClient\Exceptions\NotJsonException;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 
-class GraphResponse implements GraphResponseInterface
+class GraphResponse implements GraphResponseInterface, Arrayable, Jsonable
 {
 	protected $status_code = 200;
 	protected $body;
@@ -180,5 +182,19 @@ class GraphResponse implements GraphResponseInterface
 		$split = explode("\r\n\r\n", $response);
 		return $split[1];
 	}
+
+	public function toArray()
+    {
+        return [
+            'body' => $this->body(),
+            'headers' => $this->headers(),
+            'status_code' => $this->statusCode(),
+        ];
+    }
+
+    public function toJson($options = 0)
+    {
+        return json_encode($this->toArray());
+    }
 		
 }
