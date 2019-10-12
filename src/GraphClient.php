@@ -5,41 +5,37 @@ namespace onefasteuro\ShopifyClient;
 use onefasteuro\ShopifyClient\Exceptions\ErrorsFoundException;
 use onefasteuro\ShopifyClient\Exceptions\NotFoundException;
 use onefasteuro\ShopifyClient\Exceptions\NotReadyException;
-	
+use onefasteuro\ShopifyUtils\ShopifyUtils;
+
 class GraphClient
 {
 		
 	protected $client;
 	protected $version;
 	protected $throttle;
-		
-	protected $shop_domain;
 	protected $token;
 		
 	public function __construct($version, Throttles\ThrottleInterface $throttle)
 	{
 		$this->throttle = $throttle;
-		$this->version= $version;
+		$this->version = $version;
 	}
 		
 	protected function assertUrl($domain)
 	{
-		if(!preg_match('/https\:\/\/|http\:\/\//', $domain)) {
-			$domain = sprintf('https://%s', $domain);
-		}
-		
 		return $domain . '/admin/api/' . $this->version . '/graphql.json';
 	}
-		
+
 	public function init($shop, $token)
 	{
-		$this->shop_domain = $shop;
-		$this->token = $token;
+		$domain = ShopifyUtils::formatDomain($shop, true);
+
+		$this->setToken($token);
 			
 		$headers = array('Content-Type: application/json',
-				'X-Shopify-Access-Token: '.$this->token,
+				'X-Shopify-Access-Token: '.$this->token(),
 				'X-GraphQL-Cost-Include-Fields: '. true);
-		$url = $this->assertUrl($shop);
+		$url = $this->assertUrl($domain);
 		
 		$this->client = static::clientFactory($url, $headers);
 		
@@ -57,13 +53,18 @@ class GraphClient
 	{
 		return $this->token;
 	}
-		
-		
-	public function setToken($k)
-	{
-		$this->token = $k;
-		return $this;
-	}
+
+    public function setToken($t)
+    {
+        $this->token = $t;
+        return $this;
+    }
+
+
+    protected function setHeaders()
+    {
+        //TODO
+    }
 		
 	public function setVersion($v)
 	{
@@ -122,7 +123,7 @@ class GraphClient
 		$headers = GraphResponse::parseHeaders($response);
 		$status_code = GraphResponse::parseStatusCode($response);
 		$body = GraphResponse::parseBody($response);
-		
+
 		return new GraphResponse($headers, $status_code, $body);
 	}
 		
