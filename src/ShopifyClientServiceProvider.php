@@ -30,7 +30,7 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
     {
 	    $this->mergeConfigFrom(__DIR__ . '/../config/shopifyclient.php', 'shopifyclient');
 	
-	    $this->app->bind(Throttles\Throttle::class, function($app){
+	    $this->app->bind(Throttles\ThrottleInterface::class, function($app){
 		    return new Throttles\Throttle;
 	    });
 
