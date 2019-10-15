@@ -128,6 +128,15 @@ class GraphResponse implements GraphResponseInterface, Arrayable, Jsonable
 	{
 		return ($key === null) ? $this->body('data') : $this->body('data.'.$key);
 	}
+	
+	/**
+	 * Verifies that our response contains certain data
+	 * @param $key
+	 */
+	public function assertResponseContains($key)
+	{
+		//TODO
+	}
 		
 	public function isNotFound()
 	{
