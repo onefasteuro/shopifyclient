@@ -2,12 +2,11 @@
 	
 namespace onefasteuro\ShopifyClient;
 	
-use onefasteuro\ShopifyClient\Exceptions\ErrorsFoundException;
-use onefasteuro\ShopifyClient\Exceptions\NotFoundException;
+
 use onefasteuro\ShopifyClient\Exceptions\NotReadyException;
 use onefasteuro\ShopifyUtils\ShopifyUtils;
 
-class GraphClient
+class GraphClient implements GraphClientInterface
 {
 		
 	protected $client;
@@ -120,9 +119,9 @@ class GraphClient
 	
 	public static function parse($response)
 	{
-		$headers = GraphResponse::parseHeaders($response);
-		$status_code = GraphResponse::parseStatusCode($response);
-		$body = GraphResponse::parseBody($response);
+		$headers = ShopifyUtils::parseHeaders($response);
+		$status_code = ShopifyUtils::parseStatusCode($response);
+		$body = ShopifyUtils::parseBody($response);
 
 		return new GraphResponse($headers, $status_code, $body);
 	}
