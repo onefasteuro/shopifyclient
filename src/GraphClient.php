@@ -86,7 +86,7 @@ class GraphClient implements GraphClientInterface
 			
 		//client not init, stop and let everyone know
 		if(!is_resource($this->client)) {
-			throw new NotReadyException;
+			throw new NotReadyException('The client is not ready to query the data.');
 		}
 		
 		do {
