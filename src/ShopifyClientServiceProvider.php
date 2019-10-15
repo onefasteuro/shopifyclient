@@ -34,12 +34,15 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 		    return new Throttles\Throttle;
 	    });
 
-	    $this->app->singleton(GraphClientInterface::class, function($app, $params = []){
+	    $this->app->singleton(GraphClient::class, function($app, $params = []){
 		
+	    	//api version
 	    	$version = $app['config']->get('shopifyclient.version');
 
+	    	//throttle to use
 	    	$throttle = $app['config']->get('shopifyclient.throttle');
 		
+	    	//instatiate our client
 		    $client = new GraphClient($version, $app[$throttle]);
 	    	
 		    //if we have params let's init the client
