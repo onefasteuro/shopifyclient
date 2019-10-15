@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "838a415792bbfcad3fa76534d7184450",
+    "content-hash": "39aed7e3bf8c0d658bd21f6366e7d1e3",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -295,16 +295,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v6.2.0",
+            "version": "v6.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "cacce5a77fa94793cf25345d67387632134d75dd"
+                "reference": "80914c430fb5e49f492812d704ba6aeec03d80a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/cacce5a77fa94793cf25345d67387632134d75dd",
-                "reference": "cacce5a77fa94793cf25345d67387632134d75dd",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/80914c430fb5e49f492812d704ba6aeec03d80a2",
+                "reference": "80914c430fb5e49f492812d704ba6aeec03d80a2",
                 "shasum": ""
             },
             "require": {
@@ -437,7 +437,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2019-10-08T12:50:06+00:00"
+            "time": "2019-10-15T13:38:24+00:00"
         },
         {
             "name": "league/flysystem",
@@ -606,16 +606,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "2.25.1",
+            "version": "2.25.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "d59c6cea9c4a3547bb6c0dfec451319abdaa4fb1"
+                "reference": "443fe5f1498147e0fbc792142b5dc43e2e8a533f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/d59c6cea9c4a3547bb6c0dfec451319abdaa4fb1",
-                "reference": "d59c6cea9c4a3547bb6c0dfec451319abdaa4fb1",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/443fe5f1498147e0fbc792142b5dc43e2e8a533f",
+                "reference": "443fe5f1498147e0fbc792142b5dc43e2e8a533f",
                 "shasum": ""
             },
             "require": {
@@ -669,7 +669,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2019-10-05T15:52:23+00:00"
+            "time": "2019-10-14T14:18:59+00:00"
         },
         {
             "name": "onefasteuro/shopifyutils",
@@ -677,12 +677,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/onefasteuro/shopifyutils.git",
-                "reference": "809e76472a509dc1a98a102a0cfc9002ee33fe20"
+                "reference": "c5dfe47ef35f4fd7522f58e11df6a7d2ee45fcf0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/onefasteuro/shopifyutils/zipball/809e76472a509dc1a98a102a0cfc9002ee33fe20",
-                "reference": "809e76472a509dc1a98a102a0cfc9002ee33fe20",
+                "url": "https://api.github.com/repos/onefasteuro/shopifyutils/zipball/c5dfe47ef35f4fd7522f58e11df6a7d2ee45fcf0",
+                "reference": "c5dfe47ef35f4fd7522f58e11df6a7d2ee45fcf0",
                 "shasum": ""
             },
             "require": {
@@ -717,7 +717,7 @@
             "keywords": [
                 "shopify"
             ],
-            "time": "2019-10-12T12:10:30+00:00"
+            "time": "2019-10-14T15:40:34+00:00"
         },
         {
             "name": "opis/closure",
@@ -4359,7 +4359,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-curl": "*"
     },
     "platform-dev": []
 }

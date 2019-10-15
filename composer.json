@@ -13,6 +13,7 @@
     "keywords": ["Laravel", "Shopify", "curl", "api", "graphql"],
     "require": {
         "ext-json": "*",
+        "ext-curl": "*",
         "illuminate/support": "^6.0",
         "illuminate/config": "^6.0",
         "onefasteuro/shopifyutils": "dev-master"
