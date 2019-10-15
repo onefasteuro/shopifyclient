@@ -158,7 +158,11 @@ class GraphResponse implements GraphResponseInterface, Arrayable, Jsonable
 		return $this->is_json;
 	}
 	
-	
+	/**
+	 * Returns the response headers in array format
+	 * @param $response
+	 * @return array
+	 */
 	public static function parseHeaders($response)
 	{
 		$split = explode("\r\n\r\n", $response);
@@ -177,6 +181,11 @@ class GraphResponse implements GraphResponseInterface, Arrayable, Jsonable
 		return $headers;
 	}
 	
+	/**
+	 * Returns the response status code
+	 * @param $response
+	 * @return int
+	 */
 	public static function parseStatusCode($response)
 	{
 		$code = strstr($response,"\r\n",true);
@@ -186,6 +195,11 @@ class GraphResponse implements GraphResponseInterface, Arrayable, Jsonable
 		return (count($matches) > 0) ? (int) $matches[0] : 0;
 	}
 	
+	/**
+	 * Return the response body
+	 * @param $response
+	 * @return mixed
+	 */
 	public static function parseBody($response)
 	{
 		$split = explode("\r\n\r\n", $response);
