@@ -34,7 +34,7 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 		    return new Throttles\Throttle;
 	    });
 
-	    $this->app->singleton(ClientInterface::class, function($app, $params = []){
+	    $this->app->singleton(GraphClientInterface::class, function($app, $params = []){
 		
 	    	//api version
 	    	$version = $app['config']->get('shopifyclient.version');
@@ -43,7 +43,7 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 	    	$throttle = $app['config']->get('shopifyclient.throttle');
 		
 	    	//instatiate our client
-		    $client = new GraphClient($version, $app[$throttle]);
+		    $client = new GraphGraphClient($version, $app[$throttle]);
 	    	
 		    //if we have params let's init the client
 	    	if(count($params) > 0 and array_key_exists('domain', $params) and array_key_exists('token', $params)) {

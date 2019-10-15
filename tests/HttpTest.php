@@ -2,7 +2,7 @@
 	
 namespace onefasteuro\ShopifyClient\Tests;
 
-use onefasteuro\ShopifyClient\GraphClient;
+use onefasteuro\ShopifyClient\GraphGraphClient;
 use onefasteuro\ShopifyClient\GraphResponse;
 
 class HttpTest extends TestCase
@@ -10,7 +10,7 @@ class HttpTest extends TestCase
 
 	public function testFlow()
 	{
-		$mock = $this->mock(\onefasteuro\ShopifyClient\GraphClient::class);
+		$mock = $this->mock(\onefasteuro\ShopifyClient\GraphGraphClient::class);
 		
 		$mock->shouldReceive(['init', 'query', 'transport', 'parse'])->andReturn(GraphResponse::class);
 	}
@@ -19,7 +19,7 @@ class HttpTest extends TestCase
 	{
 		$this->expectException(\onefasteuro\ShopifyClient\Exceptions\NotFoundException::class);
 		
-		$client = app(GraphClient::class);
+		$client = app(GraphGraphClient::class);
 		$client->init('http://example.com', 'testtoken');
 		
 		$response = $client->query([]);
