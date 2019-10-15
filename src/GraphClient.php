@@ -6,7 +6,7 @@ namespace onefasteuro\ShopifyClient;
 use onefasteuro\ShopifyClient\Exceptions\NotReadyException;
 use onefasteuro\ShopifyUtils\ShopifyUtils;
 
-class GraphClient implements GraphClientInterface
+class GraphClient implements ClientInterface
 {
 		
 	protected $client;

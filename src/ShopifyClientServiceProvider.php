@@ -34,7 +34,7 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 		    return new Throttles\Throttle;
 	    });
 
-	    $this->app->singleton(GraphClient::class, function($app, $params = []){
+	    $this->app->singleton(ClientInterface::class, function($app, $params = []){
 		
 	    	//api version
 	    	$version = $app['config']->get('shopifyclient.version');
