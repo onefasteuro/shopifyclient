@@ -52,6 +52,7 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 
 	    	return $client;
 	    });
+	    $this->app->alias(GraphClientInterface::class, 'shopify.graohql.client');
     }
     
 
