@@ -41,7 +41,7 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 	        return $client;
         });
 
-	    
+
 
 	    $this->app->bind(Throttles\ThrottleInterface::class, function($app){
 		    return new Throttles\Throttle;

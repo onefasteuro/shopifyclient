@@ -6,19 +6,17 @@ namespace onefasteuro\ShopifyClient;
 use onefasteuro\ShopifyClient\Exceptions\NotReadyException;
 use onefasteuro\ShopifyUtils\ShopifyUtils;
 
-class GraphClient implements GraphClientInterface
+class GraphClient extends BaseClient implements GraphClientInterface
 {
-
-	protected $client;
 	protected $version;
 	protected $throttle;
 	protected $token;
 		
 	public function __construct(ShopifyClientInterface $client, $version, Throttles\ThrottleInterface $throttle)
 	{
+	    parent::__construct($client);
 		$this->throttle = $throttle;
 		$this->version = $version;
-		$this->client = $client;
 	}
 		
 	protected function assertUrl($domain)
@@ -47,24 +45,7 @@ class GraphClient implements GraphClientInterface
 	{
 		return $this->version;
 	}
-		
 
-	public function token()
-	{
-		return $this->token;
-	}
-
-    public function setToken($t)
-    {
-        $this->token = $t;
-        return $this;
-    }
-
-
-    protected function setHeaders()
-    {
-        //TODO
-    }
 		
 	public function setVersion($v)
 	{
@@ -111,42 +92,7 @@ class GraphClient implements GraphClientInterface
 		
 	protected function transport($payload)
 	{
-		$headers = [];
-		
-		curl_setopt($this->client, CURLOPT_POSTFIELDS, $payload);
-		
-		return curl_exec($this->client);
-	}
-	
-	public static function parse($response)
-	{
-		$headers = ShopifyUtils::parseHeaders($response);
-		$status_code = ShopifyUtils::parseStatusCode($response);
-		$body = ShopifyUtils::parseBody($response);
 
-		return new GraphResponse($headers, $status_code, $body);
-	}
-		
-		
-	protected static function clientFactory($url, array $headers)
-	{
-	    $client = new \Requests_Session($url);
-
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 20);
-		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_HEADER, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-		curl_setopt($ch, CURLOPT_VERBOSE, false);
-			
-		return $ch;
-	}
-	
-	public function getInfo($key)
-	{
-		return curl_getinfo($this->client, $key);
 	}
 
 	/*

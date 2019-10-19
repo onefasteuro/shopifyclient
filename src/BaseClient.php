@@ -3,9 +3,6 @@
 namespace onefasteuro\ShopifyClient;
 	
 
-use onefasteuro\ShopifyClient\Exceptions\NotReadyException;
-use onefasteuro\ShopifyUtils\ShopifyUtils;
-use GuzzleHttp\Client as HttpClient;
 
 abstract class BaseClient
 {
