@@ -2,6 +2,7 @@
 
 namespace onefasteuro\ShopifyClient;
 
+use GuzzleHttp\Client as HttpClient;
 
 
 class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
@@ -29,10 +30,25 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
 	    $this->mergeConfigFrom(__DIR__ . '/../config/shopifyclient.php', 'shopifyclient');
-	
+
+	    $this->app->bind(HttpClientInterface::class, function($app){
+	        return new HttpClient;
+        });
+
 	    $this->app->bind(Throttles\ThrottleInterface::class, function($app){
 		    return new Throttles\Throttle;
 	    });
+
+	    $this->app->singleton(StorefrontClientInterface::class, function($app, $params = []){
+
+	        $client = new StorefrontClient;
+
+	        if(count($params) > 0 and array_key_exists('domain', $params) and array_key_exists('token', $params)) {
+	            $client->init($params['domain'], $params['token']);
+            }
+
+            return $client;
+        });
 
 	    $this->app->singleton(GraphClientInterface::class, function($app, $params = []){
 		
@@ -43,7 +59,8 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 	    	$throttle = $app['config']->get('shopifyclient.throttle');
 		
 	    	//instatiate our client
-		    $client = new GraphClient($version, $app[$throttle]);
+            $provider = $app[HttpClientInterface::class];
+		    $client = new GraphClient($provider, $version, $app[$throttle]);
 	    	
 		    //if we have params let's init the client
 	    	if(count($params) > 0 and array_key_exists('domain', $params) and array_key_exists('token', $params)) {

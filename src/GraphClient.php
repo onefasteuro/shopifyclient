@@ -8,16 +8,17 @@ use onefasteuro\ShopifyUtils\ShopifyUtils;
 
 class GraphClient implements GraphClientInterface
 {
-		
+
 	protected $client;
 	protected $version;
 	protected $throttle;
 	protected $token;
 		
-	public function __construct($version, Throttles\ThrottleInterface $throttle)
+	public function __construct(HttpClientInterface $client, $version, Throttles\ThrottleInterface $throttle)
 	{
 		$this->throttle = $throttle;
 		$this->version = $version;
+		$this->client = $client;
 	}
 		
 	protected function assertUrl($domain)
@@ -129,6 +130,8 @@ class GraphClient implements GraphClientInterface
 		
 	protected static function clientFactory($url, array $headers)
 	{
+	    $client = new \Requests_Session($url);
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -145,11 +148,13 @@ class GraphClient implements GraphClientInterface
 	{
 		return curl_getinfo($this->client, $key);
 	}
-		
+
+	/*
 	public function __destruct()
 	{
 		if (is_resource($this->client)) {
 			curl_close($this->client);
 		}
 	}
+	*/
 }
