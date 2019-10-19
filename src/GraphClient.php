@@ -14,7 +14,7 @@ class GraphClient implements GraphClientInterface
 	protected $throttle;
 	protected $token;
 		
-	public function __construct(HttpClientInterface $client, $version, Throttles\ThrottleInterface $throttle)
+	public function __construct(ShopifyClientInterface $client, $version, Throttles\ThrottleInterface $throttle)
 	{
 		$this->throttle = $throttle;
 		$this->version = $version;

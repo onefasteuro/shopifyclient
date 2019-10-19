@@ -3,6 +3,6 @@
 namespace onefasteuro\ShopifyClient;
 
 
-interface HttpClientInterface
+interface ShopifyClientInterface
 {
 }

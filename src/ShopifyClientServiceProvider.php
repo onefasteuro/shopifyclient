@@ -31,9 +31,17 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
     {
 	    $this->mergeConfigFrom(__DIR__ . '/../config/shopifyclient.php', 'shopifyclient');
 
-	    $this->app->bind(HttpClientInterface::class, function($app){
-	        return new HttpClient;
+	    $this->app->bind(ShopifyClientInterface::class, function($app, $params = []){
+	        if(count($params) > 0) {
+	            $client = new HttpClient($params);
+            }
+            else {
+                $client = new HttpClient;
+            }
+	        return $client;
         });
+
+	    
 
 	    $this->app->bind(Throttles\ThrottleInterface::class, function($app){
 		    return new Throttles\Throttle;
@@ -41,7 +49,7 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 
 	    $this->app->singleton(StorefrontClientInterface::class, function($app, $params = []){
 
-	        $client = new StorefrontClient;
+	        $client = new StorefrontClient($app[ShopifyClientInterface::class]);
 
 	        if(count($params) > 0 and array_key_exists('domain', $params) and array_key_exists('token', $params)) {
 	            $client->init($params['domain'], $params['token']);
@@ -59,7 +67,7 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 	    	$throttle = $app['config']->get('shopifyclient.throttle');
 		
 	    	//instatiate our client
-            $provider = $app[HttpClientInterface::class];
+            $provider = $app[ShopifyClientInterface::class];
 		    $client = new GraphClient($provider, $version, $app[$throttle]);
 	    	
 		    //if we have params let's init the client

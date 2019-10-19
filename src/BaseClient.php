@@ -14,7 +14,7 @@ abstract class BaseClient
     protected $headers;
     protected $url;
 
-    public function __construct(HttpClientInterface $client)
+    public function __construct(ShopifyClientInterface $client)
     {
         $this->client = $client;
     }
