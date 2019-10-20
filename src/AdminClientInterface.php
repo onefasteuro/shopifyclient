@@ -3,7 +3,7 @@
 namespace onefasteuro\ShopifyClient;
 
 
-interface StorefrontClientInterface
+interface AdminClientInterface
 {
 	
 	public function query($gql, $variables = []);

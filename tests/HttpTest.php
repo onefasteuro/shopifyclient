@@ -2,75 +2,60 @@
 	
 namespace onefasteuro\ShopifyClient\Tests;
 
-use onefasteuro\ShopifyClient\GraphClient;
-use onefasteuro\ShopifyClient\GraphResponse;
+use onefasteuro\ShopifyClient\AdminClientInterface;
+use onefasteuro\ShopifyClient\StorefrontClientInterface;
+
 
 class HttpTest extends TestCase
 {
 
-	public function testFlow()
+	public function testFlowStorefront()
 	{
-		$mock = $this->mock(\onefasteuro\ShopifyClient\GraphClient::class);
+		$mock = $this->mock(StorefrontClientInterface::class);
 		
-		$mock->shouldReceive(['init', 'query', 'transport', 'parse'])->andReturn(GraphResponse::class);
+		$mock->shouldReceive(['init', 'clientFactory', 'transport', 'query'])->andReturn(\Requests_Response::class);
 	}
-	
-	public function test404()
-	{
-		$this->expectException(\onefasteuro\ShopifyClient\Exceptions\NotFoundException::class);
-		
-		$client = app(GraphClient::class);
-		$client->init('http://example.com', 'testtoken');
-		
-		$response = $client->query([]);
-	}
-	
 
-	public function testResponse()
-	{
-		$data = file_get_contents(__DIR__.'/stubs/success-raw.text');
-		$body = GraphResponse::parseBody($data);
-		$code = GraphResponse::parseStatusCode($data);
-		$headers = GraphResponse::parseHeaders($data);
-		
-		$response = new GraphResponse($headers, $code, $body);
-		
-		$this->assertIsObject($response->assertSuccessResponse());
-		$this->assertEquals(200, $response->statusCode());
-		$this->assertEquals(false, $response->hasErrors());
-		$this->assertEquals('gid://shopify/Shop/5521145907', $response->data('shop.id'));
-	}
-	
-	public function testErrorsResponse()
-	{
-		$data = file_get_contents(__DIR__.'/stubs/errors-raw.text');
-		$body = GraphResponse::parseBody($data);
-		$code = GraphResponse::parseStatusCode($data);
-		$headers = GraphResponse::parseHeaders($data);
-		
-		$response = new GraphResponse($headers, $code, $body);
-		
-		$this->assertEquals(true, $response->hasErrors());
-		$this->assertIsArray($response->body());
-		
-		$errors = [
-			"Field 'ids' doesn't exist on type 'Shop'"
-		];
-		
-		$this->assertEquals($errors, $response->errors());
-	}
-	
-	public function testNotJson()
-	{
-		$data = file_get_contents(__DIR__.'/stubs/notjson-raw.text');
-		$body = GraphResponse::parseBody($data);
-		$code = GraphResponse::parseStatusCode($data);
-		$headers = GraphResponse::parseHeaders($data);
-		
-		$response = new GraphResponse($headers, $code, $body);
-		
-		$this->expectException(\onefasteuro\ShopifyClient\Exceptions\NotJsonException::class);
-		$response->assertSuccessResponse();
-	}
+    public function testFlowGraph()
+    {
+        $mock = $this->mock(AdminClientInterface::class);
+
+        $mock->shouldReceive(['init', 'clientFactory', 'transport', 'query'])->andReturn(\Requests_Response::class);
+    }
+
+    public function testStorefrontResponse()
+    {
+
+        $client = resolve(StorefrontClientInterface::class, ['domain' => 'DOMAIN', 'token' => 'TOKEN']);
+
+
+
+        $call = '{
+            shop {
+                name
+            }
+        }';
+
+        $response = $client->query($call);
+
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    public function testAdminResponse()
+    {
+        $client = resolve(AdminClientInterface::class, ['token' => 'TOKEN', 'domain' => 'DOMAIN']);
+
+
+        $call = '{
+            shop {
+                name
+            }
+        }';
+
+        $response = $client->query($call);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertTrue(!$response->hasErrors());
+    }
 }
 

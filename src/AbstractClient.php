@@ -4,39 +4,15 @@ namespace onefasteuro\ShopifyClient;
 	
 
 
-abstract class BaseClient
+abstract class AbstractClient
 {
     protected $token;
     protected $client = null;
-    protected $headers;
-    protected $url;
+    protected $session = null;
 
-    public function __construct(ShopifyClientInterface $client)
+    public function __construct(\Requests_Session $client)
     {
-        $this->client = $client;
-    }
-
-    public function setHeaders(array $h)
-    {
-        $this->headers = $h;
-        return $this;
-    }
-
-    public function setUrl($url)
-    {
-        //validate url
-        $this->url = $url;
-        return $this;
-    }
-
-    public function url()
-    {
-        return $this->url;
-    }
-
-    public function headers()
-    {
-        return $this->headers;
+        $this->session = $client;
     }
 
     public function token()
@@ -50,6 +26,8 @@ abstract class BaseClient
         return $this;
     }
 
+    abstract protected function endpoint();
+
     protected function preparePayload($gql, $variables = [])
     {
         $send = (count($variables) > 0) ? ["query" => $gql, "variables" => $variables] : ["query" => $gql];
@@ -58,12 +36,28 @@ abstract class BaseClient
         return $send_payload;
     }
 
+    public function session()
+    {
+        return $this->session;
+    }
+
     abstract protected function transport($send_payload);
-		
+
+
 	public function query($gql, $variables = [])
 	{
+	    //client not ready
+	    if(!$this->session instanceof \Requests_Session) {
+
+        }
+
 		$send_payload = $this->preparePayload($gql, $variables);
 
 		return $this->transport($send_payload);
 	}
+
+	public static function parse(\Requests_Response $response)
+    {
+        return json_decode($response->body, true);
+    }
 }
