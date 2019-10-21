@@ -81,6 +81,7 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 
 	        return new StorefrontClient($client);
         });
+	    $this->app->alias(StorefrontClientInterface::class, 'shopifyclient.storefront.client');
 
 	    $this->app->bind(AdminClientInterface::class, function($app, $config = []){
 
@@ -97,7 +98,7 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 
 	    	return new AdminClient($version, $throttle, $client);
 	    });
-	    $this->app->alias(AdminClientInterface::class, 'shopify.graohql.client');
+	    $this->app->alias(AdminClientInterface::class, 'shopifyclient.admin.client');
     }
     
 
