@@ -18,14 +18,12 @@ class Throttle implements ThrottleInterface
 
 	public function assertThrottle(GraphResponse $response)
 	{
-		$output = $response->body();
-		
 		$is = false;
-		if(array_key_exists('errors', $output)) {
-			foreach($output['errors'] as $error) {
+		if($response->hasErrors()) {
+			foreach($response->getBody('errors') as $error) {
 				if($error['message'] === static::THROTTLE_ERROR) {
 					$is = true;
-					$this->refresh($output['extensions']);
+					$this->refresh($response->getBody('extensions'));
 				}
 			}
 		}

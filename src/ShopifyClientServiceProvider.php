@@ -4,6 +4,10 @@ namespace onefasteuro\ShopifyClient;
 
 
 
+
+use onefasteuro\ShopifyClient\Throttles\Throttle;
+use onefasteuro\ShopifyUtils\ShopifyUtils;
+
 class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     /**
@@ -29,30 +33,71 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
 	    $this->mergeConfigFrom(__DIR__ . '/../config/shopifyclient.php', 'shopifyclient');
-	
+
+	    $this->app->bind(ShopifyClientInterface::class, function($app, $config = []){
+
+	        $domain = array_key_exists('domain', $config) ? ShopifyUtils::formatDomain($config['domain'], true) : null;
+            $session = new \Requests_Session($domain);
+
+            $session->headers['Content-Type'] = 'application/json';
+
+            if(array_key_exists('token', $config)) {
+
+                switch ($config['type']) {
+
+                    case StorefrontClientInterface::class:
+
+                        $session->headers['X-Shopify-Storefront-Access-Token'] = $config['token'];
+
+                        break;
+
+
+                        case AdminClientInterface::class:
+
+                        $session->headers['X-Shopify-Access-Token'] = $config['token'];
+
+                        if($app['config']->get('shopifyclient.extra_graph_headers') === true) {
+                            $session->headers['X-GraphQL-Cost-Include-Fields'] = true;
+                        }
+
+                        break;
+                }
+            }
+
+            return $session;
+        });
+	    $this->app->alias(ShopifyClientInterface::class, 'shopifyclient.client');
+
+
+
 	    $this->app->bind(Throttles\ThrottleInterface::class, function($app){
 		    return new Throttles\Throttle;
 	    });
 
-	    $this->app->singleton(GraphClientInterface::class, function($app, $params = []){
-		
+	    $this->app->bind(StorefrontClientInterface::class, function($app, $config = []){
+
+	        $config['type'] = StorefrontClientInterface::class;
+	        $client = $app->makeWith(ShopifyClientInterface::class, $config);
+
+	        return new StorefrontClient($client);
+        });
+
+	    $this->app->bind(AdminClientInterface::class, function($app, $config = []){
+
 	    	//api version
 	    	$version = $app['config']->get('shopifyclient.version');
 
 	    	//throttle to use
-	    	$throttle = $app['config']->get('shopifyclient.throttle');
-		
-	    	//instatiate our client
-		    $client = new GraphClient($version, $app[$throttle]);
-	    	
-		    //if we have params let's init the client
-	    	if(count($params) > 0 and array_key_exists('domain', $params) and array_key_exists('token', $params)) {
-	    		$client->init($params['domain'], $params['token']);
-		    }
+	    	$throttle_class = $app['config']->get('shopifyclient.throttle');
 
-	    	return $client;
+            $config['type'] = AdminClientInterface::class;
+            $client = $app->makeWith(ShopifyClientInterface::class, $config);
+
+            $throttle = new Throttle;
+
+	    	return new AdminClient($version, $throttle, $client);
 	    });
-	    $this->app->alias(GraphClientInterface::class, 'shopify.graohql.client');
+	    $this->app->alias(AdminClientInterface::class, 'shopify.graohql.client');
     }
     
 
