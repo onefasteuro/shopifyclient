@@ -3,9 +3,6 @@
 namespace onefasteuro\ShopifyClient;
 
 
-
-
-use onefasteuro\ShopifyClient\Throttles\Throttle;
 use onefasteuro\ShopifyUtils\ShopifyUtils;
 
 class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider

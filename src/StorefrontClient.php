@@ -2,8 +2,6 @@
 	
 namespace onefasteuro\ShopifyClient;
 
-use onefasteuro\ShopifyUtils\ShopifyUtils;
-
 
 class StorefrontClient extends AbstractClient implements StorefrontClientInterface
 {

@@ -7,7 +7,6 @@ namespace onefasteuro\ShopifyClient;
 abstract class AbstractClient
 {
     protected $token;
-    protected $client = null;
     protected $session = null;
 
     public function __construct(\Requests_Session $client)
