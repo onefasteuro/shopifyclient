@@ -15,6 +15,11 @@ class GraphResponse
         $this->raw = $response;
         $this->body = static::parse($response->body);
     }
+    
+    public function getRaw()
+    {
+    	return $this->raw;
+    }
 
     public function getHeader($k)
     {
