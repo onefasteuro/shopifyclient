@@ -71,7 +71,8 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 
 
 	    $this->app->bind(Throttles\ThrottleInterface::class, function($app){
-		    return new Throttles\Throttle;
+	    	$tc = $app['config']->get('shopifyclient.throttle');
+		    return new $tc;
 	    });
 
 	    $this->app->bind(StorefrontClientInterface::class, function($app, $config = []){
@@ -88,19 +89,16 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 	    	//api version
 	    	$version = $app['config']->get('shopifyclient.version');
 
-	    	//throttle to use
-	    	$throttle_class = $app['config']->get('shopifyclient.throttle');
-
             $config['type'] = AdminClientInterface::class;
             $client = $app->makeWith(ShopifyClientInterface::class, $config);
 
-            $throttle = new Throttle;
+            $throttle = $app[Throttles\ThrottleInterface::class];
 
 	    	return new AdminClient($version, $throttle, $client);
 	    });
 	    $this->app->alias(AdminClientInterface::class, 'shopifyclient.admin.client');
     }
-    
+
 
     /**
      * Get the services provided by the provider.
