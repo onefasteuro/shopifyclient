@@ -56,6 +56,21 @@ class GraphResponse
         return array_key_exists('errors', $this->body) ? true : false;
     }
 
+    public function errors()
+    {
+    	return $this->hasErrors() ? $this->getBody('errors') : [];
+    }
+    
+    public function data($key = null)
+    {
+    	if($key === null) {
+	    	return $this->getBody('data');
+	    }
+	    else {
+	    	return $this->getBody('data.' . $key);
+	    }
+    }
+    
     /**
      * Magic method to access the underlying request response object methods
      * @param $method
