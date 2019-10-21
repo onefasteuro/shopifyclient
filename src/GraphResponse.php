@@ -71,7 +71,12 @@ class GraphResponse
 	    }
     }
     
-    /**
+    public function __toString()
+    {
+	    return $this->raw->body;
+    }
+	
+	/**
      * Magic method to access the underlying request response object methods
      * @param $method
      * @param array $params
