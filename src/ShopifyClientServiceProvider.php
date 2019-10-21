@@ -36,7 +36,7 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 
 	    $this->app->bind(ShopifyClientInterface::class, function($app, $config = []){
 
-	        $domain = array_key_exists('domain', $config) ? ShopifyUtils::formatDomain($config['domain'], true) : null;
+	        $domain = array_key_exists('domain', $config) ? ShopifyUtils::formatFqdn($config['domain']) : null;
             $session = new \Requests_Session($domain);
 
             $session->headers['Content-Type'] = 'application/json';
