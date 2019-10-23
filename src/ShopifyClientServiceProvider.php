@@ -38,28 +38,29 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 
             $session->headers['Content-Type'] = 'application/json';
 
-            if(array_key_exists('token', $config)) {
+            //private AP
+            if(array_key_exists('api_key', $config) and array_key_exists('api_secret', $config)) {
+            	//set the auth params
+	            $session->options['auth'] = new \Requests_Auth_Basic(array($config['api_key'], $config['api_secret']));
+            }
+            elseif(array_key_exists('token', $config)) {
 
                 switch ($config['type']) {
 
                     case StorefrontClientInterface::class:
-
                         $session->headers['X-Shopify-Storefront-Access-Token'] = $config['token'];
-
                         break;
 
 
                         case AdminClientInterface::class:
-
                         $session->headers['X-Shopify-Access-Token'] = $config['token'];
-
-                        if($app['config']->get('shopifyclient.extra_graph_headers') === true) {
-                            $session->headers['X-GraphQL-Cost-Include-Fields'] = true;
-                        }
-
                         break;
                 }
             }
+		
+		    if($app['config']->get('shopifyclient.extra_graph_headers') === true) {
+			    $session->headers['X-GraphQL-Cost-Include-Fields'] = true;
+		    }
 
             return $session;
         });
