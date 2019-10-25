@@ -52,9 +52,13 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
                         break;
 
 
-                        case AdminClientInterface::class:
+                    case AdminClientInterface::class:
                         $session->headers['X-Shopify-Access-Token'] = $config['token'];
                         break;
+                        
+	                default:
+	                	$session->headers['Authorization'] = sprintf('Bearer %s', $config['token']);
+	                	break;
                 }
             }
 		
