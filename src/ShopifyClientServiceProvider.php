@@ -47,16 +47,16 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 
                 switch ($config['type']) {
 
-                    case StorefrontClientInterface::class:
+	                case ClientTypes::TYPE_SHOPIFY_STOREFRONT:
                         $session->headers['X-Shopify-Storefront-Access-Token'] = $config['token'];
                         break;
 
 
-                    case AdminClientInterface::class:
+	                case ClientTypes::TYPE_SHOPIFY_ADMIN:
                         $session->headers['X-Shopify-Access-Token'] = $config['token'];
                         break;
                         
-	                default:
+	                case ClientTypes::TYPE_BEARER;
 	                	$session->headers['Authorization'] = sprintf('Bearer %s', $config['token']);
 	                	break;
                 }
@@ -83,8 +83,8 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 	    });
 
 	    $this->app->bind(StorefrontClientInterface::class, function($app, $config = []){
-
-	        $config['type'] = StorefrontClientInterface::class;
+		
+		    $config['type'] = ClientTypes::TYPE_SHOPIFY_STOREFRONT;
 	        $client = $app->makeWith(ShopifyClientInterface::class, $config);
 
 	        return new StorefrontClient($client);
@@ -96,7 +96,7 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 	    	//api version
 	    	$version = $app['config']->get('shopifyclient.version');
 
-            $config['type'] = AdminClientInterface::class;
+            $config['type'] = ClientTypes::TYPE_SHOPIFY_ADMIN;
             $client = $app->makeWith(ShopifyClientInterface::class, $config);
 
             $throttle = $app[Throttles\ThrottleInterface::class];
