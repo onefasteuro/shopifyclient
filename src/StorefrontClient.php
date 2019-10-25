@@ -5,13 +5,18 @@ namespace onefasteuro\ShopifyClient;
 
 class StorefrontClient extends AbstractClient implements StorefrontClientInterface
 {
-
-	protected function endpoint()
+	
+	public function __construct(\Requests_Session $client)
 	{
-		return 'api/graphql';
+		parent::__construct($client);
+		
 	}
-
-
+	
+	protected function init()
+	{
+		$this->setEndpoint('api/graphql');
+	}
+	
     protected function transport($send_payload)
     {
 

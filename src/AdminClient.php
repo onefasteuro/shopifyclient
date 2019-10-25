@@ -13,15 +13,9 @@ class AdminClient extends AbstractClient implements AdminClientInterface
 	    parent::__construct($client);
 		$this->throttle = $throttle;
 		$this->version = $version;
+		$this->setEndpoint('admin/api/' . $this->version . '/graphql.json');
 	}
-
-
-    protected function endpoint()
-    {
-        return 'admin/api/' . $this->version . '/graphql.json';
-    }
-
-
+	
 
 	public function version()
 	{

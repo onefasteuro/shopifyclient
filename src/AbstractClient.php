@@ -8,10 +8,20 @@ abstract class AbstractClient
 {
     protected $token;
     protected $session = null;
+    protected $endpoint = null;
 
     public function __construct(\Requests_Session $client)
     {
         $this->session = $client;
+        if(method_exists($this, 'init')) {
+        	$this->init();
+        }
+    }
+    
+    public function setEndpoint($e)
+    {
+        $this->endpoint = $e;
+        return $this;
     }
 
     public function token()
@@ -25,7 +35,10 @@ abstract class AbstractClient
         return $this;
     }
 
-    abstract protected function endpoint();
+    public function endpoint()
+    {
+    	return $this->endpoint;
+    }
 
     protected function preparePayload($gql, $variables = [])
     {
