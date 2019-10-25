@@ -1,10 +1,8 @@
 <?php
 	
-namespace onefasteuro\ShopifyClient\Clients;
+namespace onefasteuro\ShopifyClient;
 
 
-use onefasteuro\ShopifyClient\AbstractClient;
-use onefasteuro\ShopifyClient\GraphResponse;
 
 class GraphClient extends AbstractClient
 {

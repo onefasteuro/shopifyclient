@@ -71,9 +71,9 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 	    $this->app->alias(ShopifyClientInterface::class, 'shopifyclient.client');
 
 
-	    $this->app->bind(Clients\GraphClient::class, function($app, $config){
+	    $this->app->bind(GraphClient::class, function($app, $config){
 		    $client = $app->makeWith(ShopifyClientInterface::class, $config);
-		    return new Clients\GraphClient($client);
+		    return new GraphClient($client);
 	    });
 	    
 
