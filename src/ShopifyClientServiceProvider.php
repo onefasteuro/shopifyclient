@@ -55,10 +55,6 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 	                case ClientTypes::TYPE_SHOPIFY_ADMIN:
                         $session->headers['X-Shopify-Access-Token'] = $config['token'];
                         break;
-                        
-	                case ClientTypes::TYPE_BEARER;
-	                	$session->headers['Authorization'] = sprintf('Bearer %s', $config['token']);
-	                	break;
                 }
             }
 		
@@ -71,9 +67,12 @@ class ShopifyClientServiceProvider extends \Illuminate\Support\ServiceProvider
 	    $this->app->alias(ShopifyClientInterface::class, 'shopifyclient.client');
 
 
-	    $this->app->bind(GraphClient::class, function($app, $config){
-		    $client = $app->makeWith(ShopifyClientInterface::class, $config);
-		    return new GraphClient($client);
+	    $this->app->bind(GraphClient::class, function($app, $config = []){
+	    	$domain = $config['domain'];
+		    $session = new \Requests_Session($domain);
+		    $session->headers['Content-Type'] = 'application/json';
+		    $session->headers['Authorization'] = sprintf('Bearer %s', $config['token']);
+		    return new GraphClient($session);
 	    });
 	    
 
